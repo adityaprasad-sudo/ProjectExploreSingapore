@@ -1,3 +1,5 @@
+#In This biuld vector we are gonna be using google embedder to process vector file and pdfs 
+#⚠️Use this when you are using google embedder as your RAG Engine in the main app.py File
 import os
 import json
 import time
@@ -25,7 +27,7 @@ embedder = GoogleGenerativeAIEmbeddings(
     google_api_key=API_KEY
 )
 
-# --- THE FIX IS HERE ---
+
 def get_embedding_with_retry(text, retries=5):
     """
     Handles Rate Limits (429) AND the Fake 'API Key Expired' (400) error.
@@ -59,7 +61,6 @@ def build_vectors():
     with open(DB_FILE, 'r', encoding='utf-8') as f:
         law_data = json.load(f)
 
-    # 2. Check if we have partial progress (Optional helpful feature)
     # If you want to restart, just delete the old .npy file.
     
     embeddings = []
@@ -78,7 +79,7 @@ def build_vectors():
             print(f"   ✅ Processed [{index+1}/{len(law_data)}]: {entry['filename']}")
         else:
             print(f"   ❌ FAILED [{index+1}/{len(law_data)}]: {entry['filename']}")
-            # Important: Add a placeholder vector so the index doesn't shift
+            # Important: This ensures that even when an error occurs, your data structure remains organized and aligned.
             embeddings.append([0.0] * 768)
 
         # Standard safety pause
@@ -90,4 +91,5 @@ def build_vectors():
     print("✅ Vector Database Rebuilt Successfully!")
 
 if __name__ == "__main__":
+
     build_vectors()
