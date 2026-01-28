@@ -5,15 +5,13 @@ import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
-
-# --- AI & VECTOR SEARCH IMPORTS ---
 import google.generativeai as genai
 from google.genai import types
 from openai import OpenAI
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# --- 0. SETUP & KEYS ---
+#SETUP
 load_dotenv()
 API_KEY = os.getenv("GENAI_API_KEY") # Gemini Key
 OR_API_KEY = os.getenv("OPENROUTER_API_KEY") # OpenRouter Key
@@ -26,15 +24,15 @@ GROQ_CLIENT = OpenAI(base_url="https://api.groq.com/openai/v1", api_key=GROQ_API
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}) # Allow all origins for simplicity (or restrict to your github.io)
 
-# --- 1. SETUP VECTOR SEARCH (THE BRAIN) ---
-print("⏳ Initializing AI Memory...")
+# This Block is used to setup the memoru(Vector data) which is then used for search
+print("⏳ Initializing AI Memory...") # i will use for debugging
 
-# A. Setup Embedder (Local & Free - No Rate Limits)
-# This must match the model used to build the index!
+# this AI model will run local on the backend platform SO MAKE SURE THAT YOUR PLANTFORM HAS SUFFICIENT POWER AND RAM
+# This must match the model used to build the vector data
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # B. Load the Pre-built Vector Database
-# We use 'allow_dangerous_deserialization=True' because we created these files ourselves.
+# We use 'allow_dangerous_deserialization=True' because we created the vector data locally
 DB_FOLDER = "faiss_index_minilm"
 vectorstore = None
 
@@ -82,7 +80,7 @@ def find_best_match(query):
         print(f"⚠️ Search Error: {e}")
         return None, 0.0, None
 
-# --- 3. SYSTEM INSTRUCTION ---
+# USE THIS TO GIVE INSTRUCTIONS TO THE AI
 base_system_instruction = """
 ROLE: You are a comprehensive Singapore Expert.
 
@@ -124,7 +122,7 @@ def ask_gemini():
     # Construct Final Prompt
     final_prompt = f"CONTEXT (Source: {source_name}):\n{context_text}\n\nQUESTION: {user_query}"
     
-    # --- STEP 2: GENERATION (TRIPLE-AI FAILOVER) ---
+    # MAIN LOGIC IF YOU GET THE CODE YOU CAN ADD AS MANY BACKUP AI AS YOU WANT
     
     # 1. Try Google Gemini
     if API_KEY:
@@ -138,9 +136,9 @@ def ask_gemini():
             )
             return jsonify({"answer": response.text})
         except Exception as e:
-            print(f"⚠️ Gemini Failed: {e}")
+            print(f"⚠️ Gemini Failed: {e}") #would probably fail if we hit the gemini rate limit 
 
-    # 2. Try OpenRouter (Backup)
+    # 2. Try OpenRouter (Backup)(FREE)
     if OR_CLIENT:
         try:
             print("🔄 Attempting Backup (OpenRouter)...")
@@ -150,8 +148,8 @@ def ask_gemini():
                     {"role": "system", "content": base_system_instruction},
                     {"role": "user", "content": final_prompt}
                 ],
-                temperature=0.3,
-                max_tokens=300
+                temperature=0.3,                   #controls Creativity of the AI
+                max_tokens=300                      #controls Creativity of the AI
             )
             return jsonify({"answer": f"{response.choices[0].message.content}\n\n"})
         except Exception as e:
@@ -167,8 +165,8 @@ def ask_gemini():
                     {"role": "system", "content": base_system_instruction},
                     {"role": "user", "content": final_prompt}
                 ],
-                temperature=0.3,
-                max_tokens=300
+                temperature=0.3,              #controls Creativity of the AI
+                max_tokens=300                 #controls Creativity of the AI
             )
             return jsonify({"answer": f"{response.choices[0].message.content}\n\n"})
         except Exception as e:
@@ -177,4 +175,5 @@ def ask_gemini():
     return jsonify({"answer": "System Overload. All AI models are currently busy. Please try again in 5 minute."}), 503
 
 if __name__ == '__main__':
+
     app.run(host="0.0.0.0", port=7860)
