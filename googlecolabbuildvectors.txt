@@ -1,0 +1,95 @@
+# --- BLOCK 1: INSTALL & SETUP (FIXED) ---
+print("🚀 Installing libraries...")
+!pip install -q langchain-community sentence-transformers faiss-cpu pypdf tqdm langchain-huggingface requests==2.32.4
+
+# ⚠️ Use the proper build vector ie if you are using google text embedder use buildvector.py in the backend logic folder and replace the below code with that code but if you are using the all-minil6v2 then you can safety use the code below
+import os
+import zipfile
+import torch
+from tqdm import tqdm
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings 
+from langchain_community.vectorstores import FAISS
+
+# Check GPU
+if torch.cuda.is_available():
+    print(f"✅ GPU Detected: {torch.cuda.get_device_name(0)}")
+else:
+    print("⚠️ WARNING: GPU not found. (It's okay, just slower)")
+
+# 1. Unzip Data (if valid zip exists)
+if os.path.exists("singapore_data.zip"):
+    print("📂 Unzipping data...")
+    with zipfile.ZipFile("singapore_data.zip", 'r') as zip_ref:
+        zip_ref.extractall(".") # Extract to current folder
+    print("✅ Unzip complete.")
+else:
+    print("⚠️ No 'singapore_data.zip' found. Assuming files are already uploaded.")
+
+# 2. Smart File Search (Scans EVERY folder)
+print("🔌 Initializing Model...")
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={'device': 'cuda' if torch.cuda.is_available() else 'cpu'}
+)
+
+print("🔍 Scanning entire system for PDFs...")
+pdf_files = []
+for root, dirs, files in os.walk("."):
+    for file in files:
+        if file.endswith(".pdf"):
+            # Exclude hidden folders like .config
+            if ".config" not in root:
+                pdf_files.append(os.path.join(root, file))
+
+if len(pdf_files) == 0:
+    print("❌ ERROR: No .pdf files found anywhere!")
+    print("   Please upload your zip file and run this cell again.")
+    exit()
+
+print(f"📄 Found {len(pdf_files)} PDFs. Loading...")
+
+# 3. Load & Process
+documents = []
+for file_path in tqdm(pdf_files, desc="Loading Files"):
+    try:
+        loader = PyPDFLoader(file_path)
+        documents.extend(loader.load())
+    except:
+        continue 
+
+if not documents:
+    print("❌ ERROR: Found PDFs but couldn't read any of them. Are they corrupted?")
+    exit()
+
+print(f"📊 Total Pages Loaded: {len(documents)}")
+
+print("✂️ Splitting text...")
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+chunks = text_splitter.split_documents(documents)
+print(f"🧱 Total Chunks: {len(chunks)}")
+
+# 4. Build Vector DB
+print("🧠 Building Vector Database...")
+batch_size = 10000 
+vectorstore = None
+
+for i in tqdm(range(0, len(chunks), batch_size), desc="Embedding"):
+    batch = chunks[i : i + batch_size]
+    if vectorstore is None:
+        vectorstore = FAISS.from_documents(batch, embeddings)
+    else:
+        vectorstore.add_documents(batch)
+
+# 5. Save & Zip
+if vectorstore is not None:
+    print("💾 Saving Index...")
+    vectorstore.save_local("faiss_index_minilm")
+
+    print("📦 Zipping output...")
+    !zip -r faiss_index_minilm.zip faiss_index_minilm
+
+    print("✅ DONE! Download 'faiss_index_minilm.zip' from the Files sidebar.")
+else:
+    print("❌ ERROR: Vectorstore creation failed. No data was processed.")
