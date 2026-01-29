@@ -63,6 +63,8 @@ Instead of relying on external API calls for vectorization (which adds latency a
 * Python 3.10+
 * Git
 
+![Singapore Intelligence System Architecture](null.png)
+
 ### **1. Clone the Repository**
 ```bash
 git clone [git clone https://github.com/adityaprasad-sudo/Explore-Singapore.git)
