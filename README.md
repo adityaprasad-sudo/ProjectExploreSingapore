@@ -12,7 +12,6 @@ The **Singapore Intelligence RAG System** is an advanced AI-powered platform des
 
 Unlike standard LLMs which can "hallucinate" facts, this system uses **Retrieval-Augmented Generation (RAG)**. It references a strictly curated corpus of Singaporean data (33,000+ pages of PDFs) to ground every answer in factual reality before responding.
 
-*Developed as a technical showcase for Nanyang Technological University (NTU) applications.*
 
 ---
 
@@ -34,7 +33,7 @@ To ensure reliability during demos and high traffic, the system creates a resili
 * **Secondary:** Llama 3.3 70B via OpenRouter (Robust fallback)
 * **Tertiary:** Llama 3.3 70B via Groq (Emergency backup)
 
-### **2. "Apple-Style" Interactive UI**
+### **2. "Lquid-Glass" Interactive UI**
 The frontend interface is a custom-built **Framer Code Component** (React + Framer Motion).
 * **Glassmorphism:** Real-time backdrop blur (`backdrop-filter: blur(25px)`).
 * **Spring Physics:** Smooth sideways expansion on hover.
@@ -52,7 +51,7 @@ Instead of relying on external API calls for vectorization (which adds latency a
 | **Frontend** | React, Framer Motion | Interactive "Ask AI" widget. |
 | **Backend** | Flask, Gunicorn | REST API handling RAG logic. |
 | **Vector DB** | FAISS (CPU) | Local, high-speed similarity search. |
-| **Embeddings** | Sentence-Transformers | `all-MiniLM-L6-v2` (Local). |
+| **Embeddings** | Sentence-Transformers | `all-MiniLM-L6-v2` (Local(server based)). |
 | **LLMs** | Gemini 2.0, Llama 3.3 | Text generation and synthesis. |
 | **Deployment** | Hugging Face Spaces | Docker-based cloud hosting. |
 
