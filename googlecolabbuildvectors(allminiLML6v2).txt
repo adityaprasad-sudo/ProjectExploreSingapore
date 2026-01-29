@@ -1,8 +1,8 @@
-# --- BLOCK 1: INSTALL & SETUP (FIXED) ---
-print("🚀 Installing libraries...")
+# --- BLOCK 1: INSTALL & SETUP ---
+print("Instaling libaries...")
 !pip install -q langchain-community sentence-transformers faiss-cpu pypdf tqdm langchain-huggingface requests==2.32.4
 
-# ⚠️ Use the proper build vector ie if you are using google text embedder use buildvector.py in the backend logic folder and replace the below code with that code but if you are using the all-minil6v2 then you can safety use the code below
+# Use the proper build vector ie if you are using google text embedder use buildvector.py in the backend logic folder and replace the below code with that code but if you are using the all-minil6v2 then you can safety use the code below
 import os
 import zipfile
 import torch
@@ -14,27 +14,27 @@ from langchain_community.vectorstores import FAISS
 
 # Check GPU
 if torch.cuda.is_available():
-    print(f"✅ GPU Detected: {torch.cuda.get_device_name(0)}")
+    print(f"GPU Detected: {torch.cuda.get_device_name(0)}")
 else:
-    print("⚠️ WARNING: GPU not found. (It's okay, just slower)")
+    print("WARNING: GPU not found. (Its okay, just slower)")
 
 # 1. Unzip Data (if valid zip exists)
 if os.path.exists("singapore_data.zip"):
-    print("📂 Unzipping data...")
+    print("Unziping data...")
     with zipfile.ZipFile("singapore_data.zip", 'r') as zip_ref:
         zip_ref.extractall(".") # Extract to current folder
-    print("✅ Unzip complete.")
+    print("Unzip complete.")
 else:
-    print("⚠️ No 'singapore_data.zip' found. Assuming files are already uploaded.")
+    print("No 'singapore_data.zip' found. Assuming files are already uploaded.")
 
 # 2. Smart File Search (Scans EVERY folder)
-print("🔌 Initializing Model...")
+print("Initializing Model...")
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
     model_kwargs={'device': 'cuda' if torch.cuda.is_available() else 'cpu'}
 )
 
-print("🔍 Scanning entire system for PDFs...")
+print("Scaning entire system for PDFs...")
 pdf_files = []
 for root, dirs, files in os.walk("."):
     for file in files:
@@ -44,11 +44,11 @@ for root, dirs, files in os.walk("."):
                 pdf_files.append(os.path.join(root, file))
 
 if len(pdf_files) == 0:
-    print("❌ ERROR: No .pdf files found anywhere!")
+    print("ERROR: No .pdf files found anywhere!")
     print("   Please upload your zip file and run this cell again.")
     exit()
 
-print(f"📄 Found {len(pdf_files)} PDFs. Loading...")
+print(f"Found {len(pdf_files)} PDFs. Loading...")
 
 # 3. Load & Process
 documents = []
@@ -60,22 +60,22 @@ for file_path in tqdm(pdf_files, desc="Loading Files"):
         continue 
 
 if not documents:
-    print("❌ ERROR: Found PDFs but couldn't read any of them. Are they corrupted?")
+    print("ERROR: Found PDFs but couldn't read any of them. Are they corrupted?")
     exit()
 
-print(f"📊 Total Pages Loaded: {len(documents)}")
+print(f"Total Pages Loaded: {len(documents)}")
 
-print("✂️ Splitting text...")
+print("Spliting text...")
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 chunks = text_splitter.split_documents(documents)
-print(f"🧱 Total Chunks: {len(chunks)}")
+print(f"Total Chunks: {len(chunks)}")
 
 # 4. Build Vector DB
-print("🧠 Building Vector Database...")
+print("Bulding Vector Databse...")
 batch_size = 10000 
 vectorstore = None
 
-for i in tqdm(range(0, len(chunks), batch_size), desc="Embedding"):
+for i in tqdm(range(0, len(chunks), batch_size), desc="Embeding"):
     batch = chunks[i : i + batch_size]
     if vectorstore is None:
         vectorstore = FAISS.from_documents(batch, embeddings)
@@ -84,12 +84,12 @@ for i in tqdm(range(0, len(chunks), batch_size), desc="Embedding"):
 
 # 5. Save & Zip
 if vectorstore is not None:
-    print("💾 Saving Index...")
+    print("Savng Index...")
     vectorstore.save_local("faiss_index_minilm")
 
-    print("📦 Zipping output...")
+    print("Ziping output...")
     !zip -r faiss_index_minilm.zip faiss_index_minilm
 
-    print("✅ DONE! Download 'faiss_index_minilm.zip' from the Files sidebar.")
+    print("DONE! Download 'faiss_index_minilm.zip' from the Files sidebar.")
 else:
-    print("❌ ERROR: Vectorstore creation failed. No data was processed.")
+    print("ERROR: Vectorstore creation faied. No data was procesed.")
