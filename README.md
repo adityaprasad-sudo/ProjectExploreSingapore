@@ -8,9 +8,9 @@
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-FFD21E?style=for-the-badge)](https://huggingface.co/)
 
 ## 📌 Project Overview
-The **Singapore Intelligence RAG System** is an advanced AI-powered platform designed to provide precise, context-aware information regarding Singapore’s legal framework, government policies, historical milestones, and critical infrastructure.
+The **Singapore Intelligence RAG System** is an intelligent platform that utilizes AI technology to deliver accurate and relevant information about the legal system, policies, and historical events of Singapore, as well as its critical infrastructure.
 
-Unlike standard LLMs which can "hallucinate" facts, this system uses **Retrieval-Augmented Generation (RAG)**. It references a strictly curated corpus of Singaporean data (33,000+ pages of PDFs) to ground every answer in factual reality before responding.
+Unlike other LLMs, which have the tendency to "hallucinate" facts, the Singapore Intelligence RAG System employs **Retrieval-Augmented Generation (RAG)**. It relies on a carefully curated set of Singaporean data (more than 33,000 pages of PDFs) to ensure that all answers are based on factual reality.
 
 
 ---
@@ -28,10 +28,11 @@ The system follows a high-performance RAG pipeline optimized for low-resource en
 ## 🚀 Key Features
 
 ### **1. Triple-AI Failover Backend**
-To ensure reliability during demos and high traffic, the system creates a resilient chain of command for LLM inference:
-* **Primary:** Google Gemini 2.0 Flash (Fastest, High Context)
-* **Secondary:** Llama 3.3 70B via OpenRouter (Robust fallback)
-* **Tertiary:** Llama 3.3 70B via Groq (Emergency backup)
+For reliability in demos and heavy traffic, the system establishes a robust chain of command for LLM inference as follows:
+
+## Primary: Google Gemini 2.0 Flash (Fastest, High Context)
+## Secondary: Llama 3.3 70B via OpenRouter (Robust fallback)
+## Tertiary: Llama 3.3 70B via Groq (Emergency fallback)
 
 ### **2. "Lquid-Glass" Interactive UI**
 The frontend interface is a custom-built **Framer Code Component** (React + Framer Motion).
@@ -40,8 +41,7 @@ The frontend interface is a custom-built **Framer Code Component** (React + Fram
 * **Minimalist Design:** SVG iconography and San Francisco typography.
 
 ### **3. Local Embedding Inference**
-Instead of relying on external API calls for vectorization (which adds latency and cost), the embedding model runs **locally** within the application container, ensuring data privacy and speed.
-
+Rather than using API calls for vectorization (which incurs latency and expense), the embedding model is executed locally within the application container for privacy and performance.
 ---
 
 ## 🛠 Tech Stack
