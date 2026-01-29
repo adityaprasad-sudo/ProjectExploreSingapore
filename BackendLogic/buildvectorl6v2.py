@@ -1,4 +1,6 @@
 #We are gonna use this to convert goveerment pdf files to vector data so that and Ai Model can work efficiently without giving false information baically this is the first step implement Rag.
+#VERY IMPORTANT Use this file to build Vector database locally if you wantt to build it faster use the google colab version on google colab
+#⚠️ use this build vector to build vectors for the model allLMminiL6v2
 import os
 import glob
 from langchain_community.document_loaders import PyPDFLoader
@@ -58,3 +60,4 @@ vectorstore.save_local("faiss_index_minilm")#you can rename the vector file if y
 
 
 print("✅ SUCCESS! Database saved to 'faiss_index_minilm'.")
+
