@@ -65,5 +65,4 @@ Instead of relying on external API calls for vectorization (which adds latency a
 
 ### **1. Clone the Repository**
 ```bash
-git clone [https://github.com/exploresingapore/Singapore-Intelligence-RAG.git](https://github.com/exploresingapore/Singapore-Intelligence-RAG.git)
-cd Singapore-Intelligence-RAG
+git clone [git clone https://github.com/adityaprasad-sudo/Explore-Singapore.git)
