@@ -1,4 +1,5 @@
 #In This biuld vector we are gonna be using google embedder to process vector file and pdfs 
+#VERY IMPORTANT if you want to create vector database locally use these files 
 #⚠️Use this when you are using google embedder as your RAG Engine in the main app.py File
 import os
 import json
@@ -93,3 +94,4 @@ def build_vectors():
 if __name__ == "__main__":
 
     build_vectors()
+
