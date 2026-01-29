@@ -52,7 +52,7 @@ Instead of relying on external API calls for vectorization (which adds latency a
 | **Backend** | Flask, Gunicorn | REST API handling RAG logic. |
 | **Vector DB** | FAISS (CPU) | Local, high-speed similarity search. |
 | **Embeddings** | Sentence-Transformers | `all-MiniLM-L6-v2` (Local(server based)). |
-| **LLMs** | Gemini 2.0, Llama 3.3 | Text generation and synthesis. |
+| **LLMs** | Gemini 2.5 flash, Llama 3.3 | Text generation and synthesis. |
 | **Deployment** | Hugging Face Spaces | Docker-based cloud hosting. |
 
 ---
