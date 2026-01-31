@@ -6,6 +6,7 @@
 [![LangChain](https://img.shields.io/badge/🦜🔗_LangChain-RAG-1C3C3C?style=for-the-badge)](https://python.langchain.com/)
 [![FAISS](https://img.shields.io/badge/Meta_FAISS-Vector_Search-0081CB?style=for-the-badge)](https://github.com/facebookresearch/faiss)
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-FFD21E?style=for-the-badge)](https://huggingface.co/)
+![webpage screenshot](https://github.com/adityaprasad-sudo/Explore-Singapore/blob/main/Screenshot%202026-01-31%20124142.png)
 
 ## 📌 Project Overview
 The **Singapore Intelligence RAG System** is an intelligent platform that utilizes AI technology to deliver accurate and relevant information about the legal system, policies, and historical events of Singapore, as well as its critical infrastructure.
