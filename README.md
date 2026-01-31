@@ -62,25 +62,25 @@ Rather than using API calls for vectorization (which incurs latency and expense)
 ## **Prerequisites**
 ### Very Important Install this In the backend Server before executing any Python files in the server.
 
-flask
-flask-cors
-python-dotenv
-google-generativeai
-google-genai
-langchain
-langchain-google-genai
-langchain-community
-langchain-huggingface
-faiss-cpu
-sentence-transformers
-pypdf
-tiktoken
-numpy
-gunicorn
-setuptools
-wheel
-scikit-learn
-openai
+* flask
+* flask-cors
+* python-dotenv
+* google-generativeai
+* google-genai
+* langchain
+* langchain-google-genai
+* langchain-community
+* langchain-huggingface
+* faiss-cpu
+* sentence-transformers
+* pypdf
+* tiktoken
+* numpy
+* gunicorn
+* setuptools
+* wheel
+* scikit-learn
+* openai
 
 ![Singapore Intelligence System Architecture](null.png)
 
