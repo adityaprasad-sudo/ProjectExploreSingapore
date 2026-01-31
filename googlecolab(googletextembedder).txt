@@ -107,7 +107,7 @@ if vectorstore is not None:
     # naming it google so i know which one it is
     vectorstore.save_local("faiss_index_google")
 
-    print("making a zip")
+    print("making a zip")                                                    # fixed(was not able to save the zip file)
     !zip -r faiss_index_google.zip faiss_index_google
 
     print(" downloaded 'faiss_index_google.zip'")
