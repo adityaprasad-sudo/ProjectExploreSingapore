@@ -70,13 +70,13 @@ def build_or_resume_index():
         # Filter out PDFs we have already processed
         processed_sources = set([m['source'] for m in metadata_map])
         pdfs_to_process = [p for p in all_pdfs if os.path.basename(p) not in processed_sources]
-        print(f"🔄 Resuming... Skipping {len(processed_sources)} files. {len(pdfs_to_process)} remaining.")
+        print(f"resuming skipping {len(processed_sources)} files. {len(pdfs_to_process)} remaining.")
     else:
         pdfs_to_process = all_pdfs
-        print("⚡ Starting fresh index build...")
+        print("Starting fresh index build...")
 
     if not pdfs_to_process:
-        print("✅ Index is up to date!")
+        print("Index is up to date!")
         return
 
     # D. BATCH PROCESSING LOOP
@@ -85,7 +85,7 @@ def build_or_resume_index():
         batch_texts = []
         batch_meta = []
 
-        print(f"⚙️ Processing Batch {i//BATCH_SIZE + 1}/{(len(pdfs_to_process)//BATCH_SIZE)+1}...")
+        print(f"processing batch {i//BATCH_SIZE + 1}/{(len(pdfs_to_process)//BATCH_SIZE)+1}...")
 
         for path in tqdm(batch, leave=False):
             try:
@@ -104,7 +104,7 @@ def build_or_resume_index():
                         "text": clean_text
                     })
             except Exception as e:
-                print(f"⚠️ Failed to read {os.path.basename(path)}: {e}")
+                print(f"fail to read {os.path.basename(path)}: {e}")
 
         if not batch_texts: continue
 
@@ -132,13 +132,13 @@ def build_or_resume_index():
         gc.collect()
         torch.cuda.empty_cache()
 
-    print("🎉 Indexing Complete!")
+    print("indexing complete!")
 
 # --- 4. CHAT SYSTEM ---
 def start_chat():
-    print("\n💾 Loading Index from Drive...")
+    print("\n loading index from drive.")
     if not os.path.exists(INDEX_PATH):
-        print("❌ Index not found. Please run the builder first.")
+        print("index not foun please run the builder first")
         return
 
     # Move index to GPU for fast search
@@ -189,15 +189,14 @@ def start_chat():
         """
 
         try:
-            print("🤔 Analyzing...")
+            print(" analyzing.")
             response = llm.invoke(system_prompt)
-            print(f"\n📝 RESPONSE:\n{response.content}")
+            print(f"\n RESPONSE:\n{response.content}")
         except Exception as e:
-            print(f"❌ Error generating response: {e}")
+            print(f" Error generating response: {e}")
 
-# --- EXECUTION ---
-# 1. Build the DB (Run this once, takes time)
+
 build_or_resume_index()
-
-# 2. Start Chatting
-start_chat()
+#this just to test that vectors is not corrupted and #is working
+# start chatting
+start_chat() 
