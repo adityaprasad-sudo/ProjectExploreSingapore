@@ -20,7 +20,7 @@ Unlike other LLMs, which have the tendency to "hallucinate" facts, the Singapore
 The system follows a high-performance RAG pipeline optimized for low-resource environments:
 
 1.  **Ingestion:** Processed 33,000+ pages of Singaporean legal and historical documents.
-2.  **Vectorization:** Used `all-MiniLM-L6-v2` to create 384-dimensional semantic embeddings.
+2.  **Vectorization:** Used `BGE-M3` to create 1024-dimensional semantic embeddings.
 3.  **Retrieval:** Implemented **FAISS (Facebook AI Similarity Search)** for millisecond-latency vector lookups.
 4.  **Generation:** A "Triple-Failover" logic ensures 99.9% uptime.
 
@@ -52,7 +52,7 @@ Rather than using API calls for vectorization (which incurs latency and expense)
 | **Frontend** | React, Framer Motion | Interactive "Ask AI" widget. |
 | **Backend** | Flask, Gunicorn | REST API handling RAG logic. |
 | **Vector DB** | FAISS (CPU) | Local, high-speed similarity search. |
-| **Embeddings** | Sentence-Transformers | `all-MiniLM-L6-v2` (Local(server based)). |
+| **Embeddings** | Sentence-Transformers | `BGE-M3` (Local(server based)). |
 | **LLMs** | Gemini 2.5 flash, Llama 3.3 | Text generation and synthesis. |
 | **Deployment** | Hugging Face Spaces | Docker-based cloud hosting. |
 
