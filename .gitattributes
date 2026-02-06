@@ -1,0 +1,10 @@
+# Ignore HTML files in language stats
+*.html linguist-documentation
+*.css linguist-documentation
+
+# If you have a specific build folder (like 'dist' or 'build')
+dist/* linguist-vendored
+build/* linguist-vendored
+
+# Force Python to be detected (optional, but helpful)
+*.py linguist-detectable
